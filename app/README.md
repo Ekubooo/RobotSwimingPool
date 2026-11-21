@@ -66,9 +66,8 @@ the repositories. Use the interactive launch check when those files are absent.
 
 ```powershell
 python -B -m unittest discover -s tests -p "test_rsp_launcher_ui.py"
-python -B -m unittest discover -s tests -p "test_rsp_playback.py"
 ```
 
-These CPU contracts cover playback scheduling and window/callback ownership.
+These CPU contracts cover scene selection and window/callback ownership.
 They do not open a real GL window. Interactive layout acceptance is a separate
 check using `python tools/run_rsp.py`; see [local-check policy](../README.md#running-and-checking).
