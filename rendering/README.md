@@ -27,8 +27,7 @@ Speed colors, opacity sliders and automatic depth shading work in both settings.
 The private target is allocated on first use, cached across switches and freed
 on resize/close. Equally deep faces use the first drawn face; changing which
 particle is nearest can expose square edges and cause color changes.
-The prior fixed-scene comparison is recorded in
-`docs/transparent_layer_results.md`, including results and limitations.
+See the [historical layer blending comparison](https://github.com/Ekubooo/Robot_Lab/blob/152fb9def5b7ed9112eb5b59be84943be3c65928/docs/transparent_layer_results.md).
 
 **Depth shading (automatic range)** enables near-bright/far-dark fluid color;
 **Depth strength** ranges from 0 to 1, default 0.5. At the default strength,
@@ -46,8 +45,7 @@ No manual near/far distance controls are provided. The automatic range follows
 camera/visibility changes and is not temporally filtered.
 
 Compare the effect by switching depth shading in the playback UI with the same
-80/100% opacity settings. See `docs/transparent_depth_results.md` for the prior
-measured cost and check results.
+80/100% opacity settings. See the [historical depth shading comparison](https://github.com/Ekubooo/Robot_Lab/blob/152fb9def5b7ed9112eb5b59be84943be3c65928/docs/transparent_depth_results.md).
 
 Within SSFR, **SSFR material** selects **Water** (default) or **Velocity**:
 
@@ -78,8 +76,7 @@ works while paused, and preserves the selection across reset and mode changes.
 No simulation Graph or physical parameters are changed.
 
 Switch Water/Velocity in the playback UI, including while paused and across
-reset. See `docs/ssfr_material_presets_results.md` for the prior measured
-preset comparison.
+reset. See the [historical SSFR material comparison](https://github.com/Ekubooo/Robot_Lab/blob/152fb9def5b7ed9112eb5b59be84943be3c65928/docs/ssfr_material_presets_results.md).
 
 Optional implementations live in `fluid/`; edit `fluid/config.py` for their
 startup settings. They compose the shared `ParticleInstances` resource and
@@ -100,10 +97,7 @@ SSFR approximates only the visible surface; refraction is limited to the current
 screen. No foam, spray, anisotropy, caustics or multiple optical bounces are added.
 The first version uses single-sample fluid targets over the resolved MSAA scene.
 
-Prior mode measurements and limitations are in
-`docs/rendering_fluid_modes_results.md`. The one-off performance scripts and
-intermediate outputs were removed after acceptance. Historical commands in
-those dated reports describe the original experiments, not maintained tools.
+See the [historical fluid mode measurements and limitations](https://github.com/Ekubooo/Robot_Lab/blob/152fb9def5b7ed9112eb5b59be84943be3c65928/docs/rendering_fluid_modes_results.md).
 
 `BillboardBatch` owns its shaders and a `ParticleInstances` batch. Optional fluid
 passes use the same quad and instance layout. `RegisteredBuffer` manages mapping,
@@ -185,19 +179,17 @@ Newton, run the rendering tests to verify this internal scene-object contract.
 
 ## Verification and timing
 
-Use the active WarpSim environment from the repository root:
+Use the active WarpSim environment from the host repository root. The `tests/`
+checks below require local test files, which are not distributed in the repositories:
 
 ```powershell
-python tools/check_rsp_architecture.py
 python -B -m unittest discover -s tests -p test_rsp_launcher_ui.py
 python tools/run_rsp.py
 ```
 
-The maintained CPU contracts check ownership and callback cleanup; they do not
+Those local CPU contracts check ownership and callback cleanup; they do not
 validate CUDA/OpenGL interop or visual output. After renderer changes, check the
 relevant mode, paused switches, reset and window close in the actual application.
-The latest acceptance evidence is retained in
-`output/architecture_completion_checks/REPORT.md` and `output/render_architecture.log`.
 See [local-check policy](../README.md#running-and-checking) for the retained suite.
 
 Generate targeted profiling probes only when needed, under ignored `output/`.

@@ -61,6 +61,9 @@ boundary.
 
 Focused checks (active conda environment, project root):
 
+The commands below require local `tests/` files, which are not distributed in
+the repositories. Use the interactive launch check when those files are absent.
+
 ```powershell
 python -B -m unittest discover -s tests -p "test_rsp_launcher_ui.py"
 python -B -m unittest discover -s tests -p "test_rsp_playback.py"

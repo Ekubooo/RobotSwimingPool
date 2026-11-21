@@ -288,7 +288,7 @@ class PBFScene:
         return np.array([0., 0., terrain_character_lift(bounds, self.layout)], dtype=np.float32)
 
     def draw_pool(self, viewer):
-        """Compatibility hook for newton_pbf_engine_before_refactor only."""
+        """Legacy pool-outline drawing hook retained for compatibility."""
         if not hasattr(self, "_line_starts"):
             corners = np.array([[x, y, z] for x in (0., self.container_size[0])
                                 for y in (0., self.container_size[1]) for z in (0., self.container_size[2])])

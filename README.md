@@ -1,14 +1,51 @@
-# RoboSwimmingPool architecture
+# RobotSwimingPool
 
-This RobotSwimingPool submodule was extracted from integration-repository commit
-`b439ffa`. Earlier history remains in that repository. The inherited LICENSE and
-third-party asset provenance are retained. Use this checkout inside Robot_Lab;
-the host supplies MimicKit, policies, data and the sibling Solver package.
+Run trained [MimicKit](https://github.com/xbpeng/MimicKit) policies in a Newton fluid and rigid-body
+scene. Choose a Humanoid or G1 profile, select or assemble a scene, and use the
+Newton viewer to pause, step, reset, and switch fluid rendering modes.
 
-RSP runs existing MimicKit policies in a single Newton fluid/rigid scene. The
-package is maintained in this repository and uses the existing pinned WarpSim
-environment. Training, multiple simulation worlds and standalone wheel asset
-discovery are outside this application's scope.
+<!-- RSP screenshot slot: paste GitHub-hosted runtime image Markdown here. Keep local image files out of Git. -->
+
+## Running and checking
+
+Use this submodule through [RoboLab](https://github.com/Ekubooo/Robot_Lab) at `Robot_Lab/RSP`.
+The parent repository supplies MimicKit, policy and motion paths, authored scene
+configuration, and the sibling [Solver4Newton](https://github.com/Ekubooo/Solver4Newton)
+package. Follow the parent README to install the checkout and obtain the
+required data. Run these commands from the parent repository root in WarpSim:
+
+```powershell
+python tools/run_rsp.py
+python tools/run_rsp.py --profile humanoid --direct
+python tools/run_rsp.py --profile g1 --direct
+# Optional: prepare a single asset without starting playback.
+python tools/prepare_rsp_assets.py --asset props/scene_sphere
+```
+
+The first command opens scene selection. Startup prepares missing or outdated
+assets for the selected scene. Use the [asset guide](sim_ready/RUNTIME_ASSETS.md)
+for source files and generated assets.
+
+The demo profiles require local policy files. The Humanoid profile points to
+the agent configuration and checkpoint under
+`output/a5000_dodgeball_2048_full_r01/`. The G1 profile points to the environment
+and agent configurations and checkpoint under `output/g1_lafan_full_20261107_r01/`.
+Supply the expected artifacts or update `args/rsp_pbf_demo_args.txt` or
+`args/rsp_pbf_g1_args.txt` in the parent checkout to use compatible local files.
+The environment and agent configurations also reference motion data and SMP
+prior files. Files under `output/` are outside the published checkout.
+
+For an interactive check, open the scene picker and verify that your profile
+is available. Start playback and try pause, single-step, reset, and close.
+The optional tests and profiling tools mentioned in the guides require
+local copies kept outside the versioned checkout.
+
+## Guides
+
+- [Application and playback](app/README.md)
+- [Simulation and policy timing](simulation/README.md)
+- [GPU rendering and fluid modes](rendering/README.md)
+- [Asset preparation interfaces](sim_ready/README.md)
 
 ## Code ownership
 
@@ -113,36 +150,10 @@ reset; initial placement errors return to scene selection.
 Rendering keeps device-side packing and CUDA/OpenGL mapping without CPU particle
 readback. CUDA registrations and GL resources are released before their context.
 
-## Running and checking
+## Source and license
 
-From the repository root, using the existing WarpSim environment:
-
-```powershell
-python -m pip install -e . --no-deps --no-build-isolation
-python tools/run_rsp.py
-python tools/run_rsp.py --profile humanoid --direct
-python tools/run_rsp.py --profile g1 --direct
-# Optional: prepare one asset without starting playback.
-python tools/prepare_rsp_assets.py --asset props/scene_sphere
-```
-
-The integration distribution includes RSP, Solver and PCA code, not MimicKit or asset data. Asset dependency
-pins remain in `sim_ready/requirements.txt`. Playback uses the existing MimicKit
-environment and Torch dependencies; rendering uses Newton's installed OpenGL
-and ImGui dependencies. This refactor does not change any dependency version.
-
-Run only checks relevant to a change. Static checks must scan the current
-Robot_Lab packages and reject an empty scan; old checks targeting the former
-root-level RSP package must be updated before use. For numerical relocation,
-compare the moved functions against the parent repository's baseline sources,
-allowing only explicit extraction and import changes. Tests and standalone checking/profiling scripts are local-only and ignored
-by Git; a fresh checkout does not include them. Existing local copies may be
-restored from a workspace backup, or regenerated for the change under review.
-Commands in module guides that reference these scripts require those local copies.
-
-The local contracts cover automatic preparation and replacement, playback cadence/reset, Viewer
-ownership, fluid-clock/Graph bookkeeping, and stable state storage. One-off probes,
-traces and timing reports belong under ignored `output/`. Shared evaluation
-libraries stay versioned: prior scoring lives in `tools/getup/prior_scoring.py`,
-while the G1 evaluator also uses its control-probe and joint-diagnostic modules.
-Recording interfaces are retained; recording tests and artifacts are excluded.
+This submodule was extracted from [Robot Lab commit `b439ffa`](https://github.com/Ekubooo/Robot_Lab/tree/b439ffa7d50157476301152bc8e54d815a032f70).
+The parent repository preserves the earlier history. The inherited
+[Apache License 2.0](LICENSE) and original copyright notice are included.
+See [asset provenance](sim_ready/PROVENANCE.md) for asset origins and separate
+third-party terms.
